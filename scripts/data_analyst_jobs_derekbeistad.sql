@@ -44,12 +44,91 @@ GROUP BY location
 ORDER BY AVG(star_rating) DESC;
 -- 		A. NE
 
--- 7. Select unique job titles from the data_analyst_jobs table. How many are there?
+-- 7A. Select unique job titles from the data_analyst_jobs table.
 SELECT DISTINCT title
 FROM data_analyst_jobs;
 
+-- 7B. How many are there?
 SELECT COUNT(DISTINCT title)
 FROM data_analyst_jobs;
 -- 		A. 881
 
--- 8. 
+-- 8. How many unique job titles are there for California companies?
+SELECT COUNT(DISTINCT title)
+FROM data_analyst_jobs
+WHERE location = 'CA';
+-- 		A. 230
+
+-- 9A. Find the name of each company and its average star rating for all companies that have more than 5000 reviews across all locations.
+SELECT company, AVG(star_rating) AS avg_rating
+FROM data_analyst_jobs
+WHERE review_count > 5000
+GROUP BY company;
+
+-- 9B. How many companies are there with more that 5000 reviews across all locations?
+SELECT COUNT(DISTINCT company)
+FROM data_analyst_jobs
+WHERE review_count > 5000;
+-- 		A. 40
+
+-- 10A. Add the code to order the query in #9 from highest to lowest average star rating. 
+SELECT company, AVG(star_rating) AS avg_rating
+FROM data_analyst_jobs
+WHERE review_count > 5000
+GROUP BY company
+ORDER BY avg_rating DESC;
+
+-- 10B. Which company with more than 5000 reviews across all locations in the dataset has the highest star rating? What is that rating?
+SELECT company, AVG(star_rating) AS avg_rating
+FROM data_analyst_jobs
+WHERE review_count > 5000
+GROUP BY company
+ORDER BY avg_rating DESC
+LIMIT 6;
+-- 		A. 6 way tie at 4.199 for Kaiser, Microsoft, Unilever, AMEX, GM, and Nike
+
+-- 11A. Find all the job titles that contain the word ‘Analyst’. 
+SELECT title
+FROM data_analyst_jobs
+WHERE title ILIKE '%analyst%';
+
+-- 11B. How many different job titles are there?
+SELECT COUNT(DISTINCT title)
+FROM data_analyst_jobs
+WHERE title ILIKE '%analyst%';
+-- 		A. 774
+
+-- 12A. How many different job titles do not contain either the word ‘Analyst’ or the word ‘Analytics’?
+SELECT COUNT(DISTINCT title)
+FROM data_analyst_jobs
+WHERE title ILIKE '%analyst%'
+OR title ILIKE '%analytics%';
+-- 		A. 877
+
+-- 12B. What word do these positions have in common?
+-- 		A. 'analy'
+SELECT COUNT(DISTINCT title)
+FROM data_analyst_jobs
+WHERE title ILIKE '%analy%';
+-- 		A. 877
+
+-- BONUS. You want to understand which jobs requiring SQL are hard to fill. Find the number of jobs by industry (domain) that require SQL and have been posted longer than 3 weeks.
+--  - Disregard any postings where the domain is NULL. 
+--  - Order your results so that the domain with the greatest number of `hard to fill` jobs is at the top. 
+SELECT domain, COUNT(title)
+FROM data_analyst_jobs
+WHERE skill ILIKE '%sql%'
+AND days_since_posting > (7*3)
+AND domain IS NOT NULL
+GROUP BY domain
+ORDER BY COUNT(title) DESC;
+
+--  - Which three industries are in the top 4 on this list? How many jobs have been listed for more than 3 weeks for each of the top 4?
+SELECT domain, COUNT(title)
+FROM data_analyst_jobs
+WHERE skill ILIKE '%sql%'
+AND days_since_posting > (7*3)
+AND domain IS NOT NULL
+GROUP BY domain
+ORDER BY COUNT(title) DESC
+LIMIT 4;
