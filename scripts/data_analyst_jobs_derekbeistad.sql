@@ -77,14 +77,14 @@ SELECT company, AVG(star_rating) AS avg_rating
 FROM indeed_analyst_jobs
 WHERE review_count > 5000
 GROUP BY company
-ORDER BY avg_rating DESC;
+ORDER BY avg_rating DESC, company;
 
 -- 10B. Which company with more than 5000 reviews across all locations in the dataset has the highest star rating? What is that rating?
 SELECT company, AVG(star_rating) AS avg_rating
 FROM indeed_analyst_jobs
 WHERE review_count > 5000
 GROUP BY company
-ORDER BY avg_rating DESC
+ORDER BY avg_rating DESC, company
 LIMIT 6;
 -- 		A. 6 way tie at 4.199 for Kaiser, Microsoft, Unilever, AMEX, GM, and Nike
 
