@@ -100,18 +100,17 @@ WHERE title ILIKE '%analyst%';
 -- 		A. 774
 
 -- 12A. How many different job titles do not contain either the word ‘Analyst’ or the word ‘Analytics’?
-SELECT COUNT(DISTINCT title)
+SELECT DISTINCT title
 FROM indeed_analyst_jobs
-WHERE title ILIKE '%analyst%'
-OR title ILIKE '%analytics%';
--- 		A. 877
+WHERE title NOT ILIKE '%analyst%'
+AND title NOT ILIKE '%analytics%';
+-- 		A. 4
 
 -- 12B. What word do these positions have in common?
--- 		A. 'analy'
-SELECT COUNT(DISTINCT title)
+-- 		A. 'Tableau'
+SELECT DISTINCT title
 FROM indeed_analyst_jobs
-WHERE title ILIKE '%analy%';
--- 		A. 877
+WHERE title ILIKE '%tableau%';
 
 -- BONUS. You want to understand which jobs requiring SQL are hard to fill. Find the number of jobs by industry (domain) that require SQL and have been posted longer than 3 weeks.
 --  - Disregard any postings where the domain is NULL. 
